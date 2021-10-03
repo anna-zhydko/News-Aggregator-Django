@@ -44,20 +44,23 @@ finally:
 rss_url = 'https://112ua.tv/rsslist'
 rss_text = requests.get(rss_url).text
 soup = BeautifulSoup(rss_text, 'html.parser')
+possible_trends = []  # the list stores google trends that could belong to the rss record
 
+# Getting records from all 112 rss lists
 for a in soup.find('div', class_='statpage-content').findChildren('a'):
     rss_link = a['href']
-    parser = feedparser.parse(rss_link)
+    parser = feedparser.parse(rss_link)  # feedparser for rss
     for entry in parser.entries:
-        title = entry.title
-        link = entry.link
-        fulltext = entry.fulltext[:50].lower()
-        published = entry.published
+        title, link, fulltext, published = entry.title, entry.link, entry.fulltext[:100], entry.published
+
+        # Comparing rss-record with google trend
         for trend in google_trends:
-            match = fuzz.partial_ratio(trend['title'].lower() + trend['subtitle'].lower(), title.lower() + fulltext)
-            if match >= 60:
-                print('112', title.lower() + fulltext)
-                print('trend', trend['title'].lower() + trend['subtitle'].lower())
-                print('match', match)
+            match = fuzz.token_sort_ratio(trend['title'] + trend['subtitle'], title + fulltext)
+            if match > 50:  # match should be more than 50%
+                google_trends.append(trend['title'])
+                # print('112', title.lower() + fulltext)
+                # print('trend', trend['title'].lower() + trend['subtitle'].lower())
+                # print('match', match)
+
 
 print(time.time() - c)
