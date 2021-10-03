@@ -1,5 +1,7 @@
+django
 feedparser
 requests
 bs4
+selenium
 fuzzywuzzy
 python-Levenshtein
