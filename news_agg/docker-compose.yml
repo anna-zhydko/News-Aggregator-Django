@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    command: bash -c "python /usr/src/news_agg/manage.py migrate --noinput &&
+             python /usr/src/news_agg/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/news_agg
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - chromedriver
+
+  chromedriver:
+    image: selenium/standalone-chrome
+    hostname: chrome
+    restart: always
+    ports:
+      - "4444:4444"
+
+  redis:
+    image: redis
+    volumes:
+      - redis_data:/var/lib/redis
+    restart: always
+    ports:
+      - 6379:6379
+
+volumes:
+  redis_data:

@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 from fuzzywuzzy import fuzz
 
@@ -13,8 +14,10 @@ def get_trends():
     c = time.time()
 
     google_trends_url = 'https://trends.google.com/trends/trendingsearches/daily?geo=UA'
-    path = 'C:\Program Files (x86)\chromedriver'
-    driver = webdriver.Chrome(path)
+    # path = 'C:\Program Files (x86)\chromedriver'
+    # driver = webdriver.Chrome()
+    driver = webdriver.Remote(command_executor='http://chrome:4444/wd/hub',
+                              desired_capabilities=DesiredCapabilities.CHROME)
     google_trends = []
 
     driver.get(google_trends_url)
