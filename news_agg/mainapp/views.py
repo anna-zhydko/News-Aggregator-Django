@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from mainapp.rss_parser import get_trends
+import time
 
 
 def index(request):
-    return render(request, 'mainapp/index.html')
+    return render(request, 'mainapp/index.html', {'trends_112': get_trends()})

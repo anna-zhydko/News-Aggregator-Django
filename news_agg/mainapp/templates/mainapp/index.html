@@ -12,12 +12,19 @@
 <body>
 <h1>Main page</h1>
 <div class="wrapper">
+    {% for trend_112 in trends_112 %}
     <div class="card">
-        <h2>Title</h2>
-        <h3>date</h3>
-        <a href="https://www.google.com/">link</a>
-        <h3>google trend</h3>
+        <div class="title">{{ trend_112.title }}</div>
+        <div class="published">{{ trend_112.published }}</div>
+        <a href="{{ trend_112.link }}" class="link">Link to the source</a>
+        <div class="g-trend title">Google trends</div>
+        <ul>
+        {% for trend in trend_112.google_trends %}
+        <li class="g-trend">{{ trend }}</li>
+        {% endfor%}
+        </ul>
     </div>
+    {% endfor%}
 </div>
 
 
