@@ -9,6 +9,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 from fuzzywuzzy import fuzz
 
+from .models import Trend
+
 
 def get_trends():
     c = time.time()
@@ -56,19 +58,22 @@ def get_trends():
         rss_link = a['href']
         parser = feedparser.parse(rss_link)  # feedparser for rss
         for entry in parser.entries:
-            possible_trends = []  # the list stores google trends that could belong to the rss record
+            possible_trends = ''  # the variable stores google trends that could belong to the rss record
             title, link, fulltext, published = entry.title, entry.link, entry.fulltext[:100], entry.published
 
             # Comparing rss-record with google trend
             for trend in google_trends:
                 match = fuzz.token_sort_ratio(trend['title'] + trend['subtitle'], title + fulltext)
                 if match > 50:  # match should be more than 50%
-                    possible_trends.append(trend['title'])
+                    possible_trends += '\n' + trend['title']
 
             # if 112_news has been matched at least one google trend
             if possible_trends:
+                # trend = Trend(title=title, link=link, published=published, google_trends=possible_trends)
+                # trend.save()
                 trends_112.append({'title': title, 'link': link, 'published': published,
                                    'google_trends': possible_trends})
+    # print('saved')
     print(trends_112)
     print(time.time() - c)
     return trends_112
