@@ -6,15 +6,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import time
 from fuzzywuzzy import fuzz
-
-from .models import Trend
 
 
 def get_trends():
-    c = time.time()
-
     google_trends_url = 'https://trends.google.com/trends/trendingsearches/daily?geo=UA'
     # path = 'C:\Program Files (x86)\chromedriver'
     # driver = webdriver.Chrome()
@@ -73,9 +68,7 @@ def get_trends():
                 # trend.save()
                 trends_112.append({'title': title, 'link': link, 'published': published,
                                    'google_trends': possible_trends})
-    # print('saved')
-    print(trends_112)
-    print(time.time() - c)
+
     return trends_112
 
 
